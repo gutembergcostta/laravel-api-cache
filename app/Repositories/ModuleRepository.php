@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\Module;
+use Illuminate\Support\Facades\Cache;
 
  class ModuleRepository{
     protected $entity;
@@ -11,7 +12,7 @@ use App\Models\Module;
         $this->entity = $module;
     }
 
-    public function getModulesByCourse(int $courseId){
+    public function getModulesByCourse($courseId){
         return $this->entity->where('course_id', $courseId)->get();
     }
 
@@ -22,15 +23,17 @@ use App\Models\Module;
     }
 
     public function createNewModule(int $courseId, array $data){
+        Cache::forget('courses');
         $data['course_id'] = $courseId;
         return $this->entity->create($data);
     }
 
-    public function getModuleByCourse(int $courseId, $id){
+    public function getModuleByCourse($courseId, $id){
         return $this->entity->where('course_id', $courseId)->where('uuid', $id)->firstOrfail();
     }
 
     public function updateModuleByUuid(string $id, $data){
+        Cache::forget('courses');
         $data['course_id'] = $id;
         return $this->entity->where('uuid', $id)->update($data);
     }
@@ -41,11 +44,13 @@ use App\Models\Module;
     }
 
     public function deleteModuleByUuid($id){
+        Cache::forget('courses');
         $module = $this->getModuleByUuid($id);
         return $module->delete();
     }
 
     public function updateModule($id, $data){
+        Cache::forget('courses');
         $data['course_id'] = $id;
         return $this->entity->where('id', $id)->update($data);
     }

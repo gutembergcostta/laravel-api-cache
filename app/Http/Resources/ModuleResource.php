@@ -19,7 +19,7 @@ class ModuleResource extends JsonResource
         return [
             'name' => $this->name,
             'identifier' => $this->uuid,
-
+            'lessons' => LessonResource::collection($this->whenLoaded('lessons'))
         ];
     }
 }

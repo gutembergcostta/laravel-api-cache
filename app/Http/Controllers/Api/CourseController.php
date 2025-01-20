@@ -34,7 +34,9 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        //
+        $course = $this->courseService->getCourseByUuid($id);
+
+        return new CourseResource($course);
     }
 
     public function update(StoreUpdateCourse $request, $id)
